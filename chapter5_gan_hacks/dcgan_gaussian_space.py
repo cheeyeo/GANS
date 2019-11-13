@@ -1,6 +1,5 @@
 # Example on how to generate random samples from a latent space as input to generator model from a standard Gaussian distribution with 0 mean, std dev of 1
 
-
 import numpy as np
 
 def generate_latent_points(latent_dim, samples):
