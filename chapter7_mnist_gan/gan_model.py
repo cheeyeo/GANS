@@ -1,10 +1,11 @@
 from discriminator_model import define_discriminator_model, generate_real_samples, load_real_samples
-from generator_model import define_generator, generate_fake_samples, generate_latent_points
+from generator_model import define_generator, generate_fake_samples, generate_latent_points, define_generator_tanh
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.utils import plot_model
 import numpy as np
 import matplotlib.pyplot as plt
+import argparse
 
 def define_gan_model(g_model, d_model):
 	d_model.trainable = False
@@ -69,25 +70,34 @@ def train(g_model, d_model, gan_model, dataset, latent_dim, epochs=100, batch=25
 
 			g_loss, _ = gan_model.train_on_batch(X_gan, y_gan)
 
-			print("[INFO] {:d}, {:d}/{:d}, d={:.3f}, g={:.3f}".format(i+1, j+1, batch_per_epoch, d_loss, g_loss))
+			print("[INFO] Epoch: {:d}, {:d}/{:d}, d={:.3f}, g={:.3f}".format(i+1, j+1, batch_per_epoch, d_loss, g_loss))
 
 		if (i+1) % 10 == 0:
 			summarize_performance(i, g_model, d_model, dataset, latent_dim)
 
 
 if __name__ == "__main__":
+	ap = argparse.ArgumentParser()
+	ap.add_argument("-t", "--tanh", action="store_true", help="Use tanH for generator model's activations and scale input to [-1,1]")
+	args = vars(ap.parse_args())
+	print(args)
+
 	latent_dim = 100
 
 	d_model = define_discriminator_model()
 
-	g_model = define_generator(latent_dim)
+	if args["tanh"]:
+		g_model = define_generator_tanh(latent_dim)
+	else:
+		g_model = define_generator(latent_dim)
+	
+	g_model.summary()
 
 	gan_model = define_gan_model(g_model, d_model)
-
 	gan_model.summary()
 
 	plot_model(gan_model, to_file="artifacts/gan_model.png", show_shapes=True, show_layer_names=True)
 
-	dataset = load_real_samples()
+	dataset = load_real_samples(tanh=args["tanh"])
 
 	train(g_model, d_model, gan_model, dataset, latent_dim)

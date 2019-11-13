@@ -25,12 +25,16 @@ def define_discriminator_model(in_shape=(28, 28, 1)):
 	model.compile(loss="binary_crossentropy", optimizer=opt, metrics=["accuracy"])
 	return model
 
-def load_real_samples():
+def load_real_samples(tanh=False):
 	(trainX, _), (_, _) = load_data()
 	X = np.expand_dims(trainX, axis=-1)
 	X = X.astype("float32")
-	# scale from 0-255 to 0-1
-	X = X / 255.0
+	if tanh:
+	  # Scale from 0-255 to [-1, 1]
+	  X = (X - 127.5) / 127.5
+	else:
+	  # scale from 0-255 to 0-1
+	  X = X / 255.0
 	return X
 
 def generate_real_samples(dataset, n_samples):

@@ -7,6 +7,27 @@ from tensorflow.keras.layers import Reshape
 from tensorflow.keras.utils import plot_model
 import matplotlib.pyplot as plt
 import numpy as np
+from tensorflow.keras.layers import Activation
+
+def define_generator_tanh(latent_dim):
+	n_nodes = 128*7*7
+	model = Sequential()
+	model.add(Dense(n_nodes, input_dim=latent_dim))
+	model.add(Activation("tanh"))
+	model.add(Reshape((7, 7, 128)))
+
+	# upsample to 14x14
+	model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding="same"))
+	model.add(Activation("tanh"))
+
+	# upsample to 28x28
+	model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding="same"))
+	model.add(Activation("tanh"))
+
+	model.add(Conv2D(1, (7,7), activation="sigmoid", padding="same"))
+
+	return model
+
 
 def define_generator(latent_dim):
 	n_nodes = 128 * 7 * 7
