@@ -78,4 +78,4 @@ if __name__ == "__main__":
 
 	dataset = load_real_samples()
 
-	train(g_model, d_model, gan_model, dataset, latent_dim)
+	train(g_model, d_model, gan_model, dataset, latent_dim, epochs=20)

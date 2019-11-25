@@ -61,6 +61,7 @@ if __name__ == "__main__":
 	samples = 49
 	X, _ = generate_fake_samples(m, latent_dim, samples)
 
+	# scale pixel values from [-1, 1] to [0, 1]
 	X = (X+1) / 2.0
 
 	for i in range(samples):
