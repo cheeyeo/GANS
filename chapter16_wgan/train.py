@@ -1,14 +1,23 @@
 import numpy as np
 from model import define_critic, define_generator, define_gan
 from data import generate_real_samples, generate_fake_samples, generate_latent_points, summarize_performance, plot_history, load_real_samples
+import argparse
+
+ap = argparse.ArgumentParser()
+ap.add_argument("-e", "--epochs", default=10, type=int, help="Number of epochs to train for.")
+ap.add_argument("-l", "--latent_dim", default=50, type=int, help="Latent dim for generator")
+ap.add_argument("-b", "--batch_size", default=64, type=int, help="Sets the batch size.")
+ap.add_argument("-c", "--critic", default=5, type=int, help="Number of cycles to train critic for. Default to 5 as set in paper.")
+
+args = vars(ap.parse_args())
 
 def train(g_model, c_model, gan_model, dataset, latent_dim, epochs=10, batch=64, n_critic=5):
 
 	batch_per_epoch = int(dataset.shape[0]/batch)
-	print("BATCH PER EPOCH: {:d}".format(batch_per_epoch))
+	print("[INFO] BATCH PER EPOCH: {:d}".format(batch_per_epoch))
 
 	steps = batch_per_epoch * epochs
-	print("TOTAL STEPS: {:d}".format(steps))
+	print("[INFO] TOTAL STEPS: {:d}".format(steps))
 
 	half_batch = int(batch/2)
 
@@ -43,7 +52,11 @@ def train(g_model, c_model, gan_model, dataset, latent_dim, epochs=10, batch=64,
 	plot_history(c1_hist, c2_hist, g_hist)
 
 if __name__ == "__main__":
-	latent_dim = 50
+	print(args)
+	latent_dim = args["latent_dim"]
+	batch_size = args["batch_size"]
+	n_critic = args["critic"]
+	epochs = args["epochs"]
 
 	critic = define_critic()
 
@@ -54,4 +67,4 @@ if __name__ == "__main__":
 	dataset = load_real_samples()
 	print(dataset.shape)
 
-	train(generator, critic, gan_model, dataset, latent_dim)
+	train(generator, critic, gan_model, dataset, latent_dim, epochs=epochs, batch=batch_size, n_critic=n_critic)

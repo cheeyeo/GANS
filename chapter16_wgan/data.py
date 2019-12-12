@@ -1,11 +1,12 @@
-from tensorflow.keras.datasets import mnist
+# from tensorflow.keras.datasets import mnist
+from keras.datasets import mnist
 import numpy as np
 import matplotlib.pyplot as plt
 
 def load_real_samples():
 	(trainX, trainY), (_, _) = mnist.load_data()
 
-	selected_idx = trainY==7
+	selected_idx = trainY == 7
 
 	X = trainX[selected_idx]
 	X = np.expand_dims(X, axis=-1)
@@ -35,19 +36,19 @@ def generate_fake_samples(generator, latent_dim, samples):
 	return X, y
 
 def summarize_performance(step, g_model, latent_dim, samples=100):
-
 	X, _ = generate_fake_samples(g_model, latent_dim, samples)
 
 	# scale from [-1, 1] to [0,1]
 	X = (X+1)/2.0
 
 	for i in range(10*10):
-		plt.subplot(10, 10, i+1)
+		plt.subplot(10, 10, 1+i)
 		plt.axis("off")
 		plt.imshow(X[i,:,:,0], cmap="gray_r")
 
 	fname = "artifacts/generated_plot_{:04d}.png".format(step+1)
 	plt.savefig(fname)
+	plt.close()
 	mname = "models/model_{:04d}.h5".format(step+1)
 	g_model.save(mname)
 	print("Saved: {}, {}".format(fname, mname))

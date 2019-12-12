@@ -1,15 +1,15 @@
-from tensorflow.keras.constraints import Constraint
-from tensorflow.keras import backend
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.layers import Reshape
-from tensorflow.keras.layers import Flatten
-from tensorflow.keras.layers import Conv2D
-from tensorflow.keras.layers import Conv2DTranspose
-from tensorflow.keras.layers import LeakyReLU
-from tensorflow.keras.layers import BatchNormalization
-from tensorflow.keras.initializers import RandomNormal
-from tensorflow.keras.optimizers import RMSprop
+from keras import backend
+from keras.optimizers import RMSprop
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import Reshape
+from keras.layers import Flatten
+from keras.layers import Conv2D
+from keras.layers import Conv2DTranspose
+from keras.layers import LeakyReLU
+from keras.layers import BatchNormalization
+from keras.initializers import RandomNormal
+from keras.constraints import Constraint
 
 # Clip model weights to given hypercube
 class ClipConstraint(Constraint):
@@ -84,4 +84,3 @@ def define_gan(generator, critic):
 	opt = RMSprop(lr=0.00005)
 	model.compile(loss=wasserstein_loss, optimizer=opt)
 	return model
-
