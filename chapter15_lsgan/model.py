@@ -1,16 +1,16 @@
 # Define the discriminator, generator and LSGAN models
 
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.layers import Reshape
-from tensorflow.keras.layers import Flatten
-from tensorflow.keras.layers import Conv2D
-from tensorflow.keras.layers import Conv2DTranspose
-from tensorflow.keras.layers import Activation
-from tensorflow.keras.layers import LeakyReLU
-from tensorflow.keras.layers import BatchNormalization
-from tensorflow.keras.initializers import RandomNormal
-from tensorflow.keras.optimizers import Adam
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import Reshape
+from keras.layers import Flatten
+from keras.layers import Conv2D
+from keras.layers import Conv2DTranspose
+from keras.layers import Activation
+from keras.layers import LeakyReLU
+from keras.layers import BatchNormalization
+from keras.initializers import RandomNormal
+from keras.optimizers import Adam
 
 def define_discriminator(input_shape=(28, 28, 1)):
 	init = RandomNormal(stddev=0.02)
